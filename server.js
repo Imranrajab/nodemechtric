@@ -27,20 +27,23 @@ app.post('/api/contact', async (req, res) => {
         pass: process.env.MAIL_PASS,
       },
     });
-
-    const mailOptions = {
-      from: `"${fullName}" <${email}>`,
-      to: process.env.MAIL_RECEIVER, // e.g. info@mechtricpower.com
-      subject: `New Contact Form: ${subject}`,
+  const mailOptions = {
+      from: `"${fullName} via Contact Form" <${process.env.MAIL_USER}>`,
+      to: process.env.MAIL_RECEIVER,
+      replyTo: email,
+      subject: `New Contact Form Submission: ${subject}`,
       html: `
+        <h2>Contact Form Submission</h2>
         <p><strong>Name:</strong> ${fullName}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone}</p>
         <p><strong>Company:</strong> ${company || 'N/A'}</p>
+        <p><strong>Subject:</strong> ${subject}</p>
         <p><strong>Message:</strong><br>${message}</p>
       `,
     };
 
+    await transporter.sendMail(mailOptions);
     await transporter.sendMail(mailOptions);
 
     res.json({ success: true, message: 'Message sent successfully.' });
