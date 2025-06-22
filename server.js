@@ -28,7 +28,7 @@ app.post('/api/contact', async (req, res) => {
       },
     });
   const mailOptions = {
-      from: `"${fullName} via Contact Form" <${process.env.MAIL_USER}>`,
+      from: `"${fullName} via Contact Form" `,
       to: process.env.MAIL_RECEIVER,
       replyTo: email,
       subject: `New Contact Form Submission: ${subject}`,
